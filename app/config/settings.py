@@ -1,15 +1,25 @@
-import os
+from functools import lru_cache
 
-import dotenv
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-dotenv.load_dotenv()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN", default="None")
-ADMINS = os.getenv("ADMINS", default="None").split(",")
-MODERATORS = os.getenv("MODERATORS", default="None").split(",")
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
-DB_HOST = os.getenv("DB_HOST", default="None")
-DB_NAME = os.getenv("DB_NAME", default="None")
-DB_PASS = os.getenv("DB_PASS", default="None")
-DB_PORT = os.getenv("DB_PORT", default="None")
-DB_USER = os.getenv("DB_USER", default="None")
+    BOT_TOKEN: str
+    ADMINS: list[int]
+
+    DB_HOST: str
+    DB_NAME: str
+    DB_PASS: str
+    DB_PORT: str
+    DB_USER: str
+
+
+@lru_cache(maxsize=1)
+def get_settings() -> Settings:
+    return Settings()
