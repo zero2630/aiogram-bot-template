@@ -6,9 +6,9 @@ from aiogram.fsm.context import FSMContext
 from sqlalchemy import select, update
 from aiogram.filters import Command, CommandStart
 
-from keyboards import reply, inline
-from other.database import async_session_maker
-from other.models import User
+from app.bot.keyboards import reply, inline
+from app.db.database import async_session_maker
+from app.db.models.models import User
 
 
 router = Router()

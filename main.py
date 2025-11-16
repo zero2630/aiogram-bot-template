@@ -4,14 +4,13 @@ from datetime import datetime
 from aiogram.fsm.storage.redis import RedisStorage
 from sqlalchemy import update, select, insert
 
-from handlers import (
-    user,
-    admin
-)
+from app.bot.handlers.user import user
+from app.bot.handlers.admin import admin
+
 from bot import bot, dp
-from other.database import async_session_maker
-from other.models import User
-from other import utils
+from app.db.database import async_session_maker
+from app.db.models.models import User
+from utils import utils
 
 
 async def main():

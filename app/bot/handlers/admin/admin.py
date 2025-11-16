@@ -9,11 +9,11 @@ from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.utils.deep_linking import create_start_link
 from sqlalchemy import insert, select, update
 
-from keyboards import reply
-from other import states
-from other.models import User
-from other.database import async_session_maker
-from keyboards import inline
+from app.bot.keyboards import reply
+from app.bot.states import states
+from app.db.models.models import User
+from app.db.database import async_session_maker
+from app.bot.keyboards import inline
 from bot import bot
 
 
