@@ -17,10 +17,10 @@ class Broadcast(Base):
     __tablename__ = "broadcast"
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    created_by: Mapped[int] = mapped_column(ForeignKey("user.id"), ondelete="CASCADE")
+    created_by: Mapped[int] = mapped_column(ForeignKey("bot_user.id", ondelete="CASCADE"))
     text: Mapped[str] = mapped_column(Text)
     keyboard: Mapped[Dict[str, Any]] = mapped_column(JSONB, nullable=True) # структура inline клавиатуры
     segment: Mapped[Dict[str, Any]] = mapped_column(JSONB, nullable=True) # критерии сегментации
-    sent_count Mapped[int] = mapped_column(server_default="0")
-    error_count Mapped[int] = mapped_column(server_default="0")
+    sent_count: Mapped[int] = mapped_column(server_default="0")
+    error_count: Mapped[int] = mapped_column(server_default="0")
 
