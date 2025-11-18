@@ -11,5 +11,7 @@ router = Router()
 
 @router.message(CommandStart())
 async def command_start(message: Message, command: Command):
-
-    await message.answer("start text", reply_markup=reply.main)
+    await message.answer(
+        "Стартовый текст",
+        reply_markup=reply.get_main_menu(),
+    )
