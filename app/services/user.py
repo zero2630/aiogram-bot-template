@@ -16,7 +16,6 @@ async def create_user(tg_id: int):
         stmt = insert(User).values(tg_id=tg_id).on_conflict_do_nothing().returning(User.id)
         res = await session.execute(stmt)
         inserted_id = res.scalar_one_or_none()
-        print(inserted_id)
 
         if inserted_id:
             stmt = insert(UserSettings).values(user=inserted_id).on_conflict_do_nothing()
