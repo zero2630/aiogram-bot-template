@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     DB_PORT: str
     DB_USER: str
 
+    REDIS_URL: str
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
