@@ -5,8 +5,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
-from app.bot.handlers.user import user
-from app.bot.handlers.admin import admin
+from app.bot.handlers.user import user, watch_page
+from app.bot.handlers.admin import admin, create_page
 from app.config.settings import get_settings
 from app.utils.redis import get_redis
 
@@ -27,6 +27,8 @@ async def main():
     dp.include_routers(
         user.router,
         admin.router,
+        create_page.router,
+        watch_page.router,
     )
     await dp.start_polling(bot)
 

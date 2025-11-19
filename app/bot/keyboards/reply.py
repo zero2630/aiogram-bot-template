@@ -11,6 +11,9 @@ def get_main_menu():
                 KeyboardButton(text='о боте'),
                 KeyboardButton(text='поддержка'),
             ],
+            [
+                KeyboardButton(text="смотреть страницы")
+            ]
         ],
         resize_keyboard=True,
     )
@@ -22,7 +25,7 @@ def get_admin_menu():
     menu = ReplyKeyboardMarkup(
         keyboard=[
             [
-                KeyboardButton(text='статистика'),
+                KeyboardButton(text='создать страницу'),
                 KeyboardButton(text='рассылка'),
             ],
             [
@@ -33,4 +36,14 @@ def get_admin_menu():
         resize_keyboard=True,
     )
     
+    return menu
+
+
+def get_cancel_menu():
+    menu = ReplyKeyboardMarkup(
+        keyboard = [
+            [KeyboardButton(text="отмена")]
+        ]
+    )
+
     return menu
