@@ -5,6 +5,7 @@ from sqlalchemy import func
 from sqlalchemy import DateTime, BigInteger, String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression
 
 from app.db.models.base import Base
@@ -19,3 +20,7 @@ class User(Base):
     is_admin: Mapped[bool] = mapped_column(default=expression.false())
     is_blocked: Mapped[bool] = mapped_column(default=expression.false())
     last_activity_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+    settings_relation = relationship(
+        "UserSettings", back_populates="user_relation", cascade="all, delete, delete-orphan"
+    )

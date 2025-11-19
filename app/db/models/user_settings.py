@@ -6,6 +6,7 @@ from sqlalchemy import func
 from sqlalchemy import DateTime, BigInteger, String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression
 
 from app.db.models.base import Base
@@ -17,3 +18,7 @@ class UserSettings(Base):
     user: Mapped[int] = mapped_column(ForeignKey("bot_user.id", ondelete="CASCADE"), unique=True)
     is_ru: Mapped[bool] = mapped_column(default=expression.true())
     is_notificate: Mapped[bool] = mapped_column(default=expression.true())
+
+    user_relation = relationship(
+        "User", back_populates="settings_relation"
+    )
