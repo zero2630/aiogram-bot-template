@@ -48,7 +48,7 @@ class SpamMiddleware:
         await self.storage.redis.incr(user_id)
         count = int(await self.storage.redis.get(user_id))
         current_ttl = await self.storage.redis.ttl(user_id)
-        print(await self.storage.redis.ttl(user_id), await self.storage.redis.get(user_id))
+
         if count == 1 or current_ttl == -1:
             await self.storage.redis.expire(user_id, ttl)
             return await handler(new_event, data)

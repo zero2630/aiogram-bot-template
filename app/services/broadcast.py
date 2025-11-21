@@ -18,7 +18,7 @@ async def create_and_send_broadcast(text: str, bot: Bot):
         sent = 0
         sent_success = 0
         sent_error = 0
-        chunk_size = 1
+        chunk_size = 10
 
         stmt_count = select(func.count(User.id))
         total_users =  await session.scalar(stmt_count) or 0
@@ -33,8 +33,17 @@ async def create_and_send_broadcast(text: str, bot: Bot):
             res = [item[0] for item in res]
 
             for user in res:
-                await bot.send_message(user.tg_id, text, reply_markup=inline.get_broadcast_received_kb())
+                
                 await asyncio.sleep(0.05)
+                try:
+                    await bot.send_message(user.tg_id, text, reply_markup=inline.get_broadcast_received_kb())
+                    sent_success += 1
+                except TelegramForbiddenError:
+                    errors += 1
+                except TelegramBadRequest:
+                    errors += 1
+                except Exception:
+                    errors += 1
 
             sent += len(res)
             offset += len(res)
