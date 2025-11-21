@@ -3,8 +3,15 @@ from aiogram.filters.callback_data import CallbackData
 
 from app.services.user_settings import get_user_settings
 
+class Default(CallbackData, prefix="default"):
+    action: str
+
 class UserSettings(CallbackData, prefix="reaction"):
     action: str
+
+class Broadcast(CallbackData, prefix="reaction"):
+    action: str
+    text: str
 
 
 class Paginator(CallbackData, prefix="paginator"):
@@ -65,3 +72,19 @@ def get_pagination_kb(
 
     return kb.as_markup()
 
+def get_broadcast_confirm_kb(text):
+    kb = InlineKeyboardBuilder()
+
+    kb.button(text=f"отправить", callback_data=Broadcast(action="send", text=text))
+    kb.button(text=f"отмена", callback_data=Broadcast(action="cancel", text=""))
+    kb.adjust(2)
+    
+    return kb.as_markup(resize_keyboard=True) 
+
+
+def get_broadcast_received_kb():
+    kb = InlineKeyboardBuilder()
+
+    kb.button(text=f"получено ✅", callback_data=Default(action="received"))
+    
+    return kb.as_markup(resize_keyboard=True) 

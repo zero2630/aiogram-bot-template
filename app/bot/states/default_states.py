@@ -10,3 +10,7 @@ class DefaultState(StatesGroup):
 class CreatePageState(StatesGroup):
     title = State()
     text = State()
+
+
+class CreateBroadcast(StatesGroup):
+    text = State()

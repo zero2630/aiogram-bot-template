@@ -30,13 +30,3 @@ async def change_lang_callback(call: CallbackQuery, callback_data: inline.UserSe
     f"<b>{data.title}</b>\n{data.text}",
     reply_markup=inline.get_pagination_kb(callback_data.page, callback_data.total_pages),
     )
-
-
-# @router.callback_query(inline.Paginator.filter(F.action == "prev"))
-# async def change_lang_callback(call: CallbackQuery, callback_data: inline.UserSettings):
-#     data = await page.get_page(callback_data.page-1)
-
-#     await call.message.edit_text(
-#     f"<b>{data.title}</b>\n{data.text}",
-#     reply_markup=inline.get_pagination_kb(callback_data.page, callback_data.total_pages),
-#     )

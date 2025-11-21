@@ -47,3 +47,15 @@ async def change_notif_callback(call: CallbackQuery, callback_data: inline.UserS
             call.message.chat.id,
         ))
     )
+
+
+@router.callback_query(inline.Default.filter(F.action == "received"))
+async def change_lang_callback(call: CallbackQuery, callback_data: inline.UserSettings):
+    await user_settings.change_lang(call.from_user.id)
+
+    await call.message.edit_text(
+        f"{call.from_user.id} подтвердил",
+        reply_markup=None,
+    )
+
+    await call.bot.send_message(840345603, f"{call.from_user.id} подтвердил")
