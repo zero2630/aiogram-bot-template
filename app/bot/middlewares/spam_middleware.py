@@ -1,10 +1,14 @@
 from typing import Callable, Any, Dict, Awaitable
 import asyncio  # noqa: F401
+import logging
 
 from aiogram.types import TelegramObject, Message
 from aiogram.enums.content_type import ContentType
 
 import html
+
+
+logger = logging.getLogger(__name__)
 
 
 class SpamMiddleware:
@@ -17,8 +21,10 @@ class SpamMiddleware:
         event: Message,
         data: Dict[str, Any],
     ):
-        user = event.from_user.id
         new_event = event
+        limit = 3
+        ttl = 3
+        user_id = event.from_user.id
 
         text = ""
         if event.content_type == ContentType.TEXT:
@@ -33,22 +39,28 @@ class SpamMiddleware:
 
         if len(text) > 1000:
             await event.answer("Слишком большой текст сообщения")
+            logger.info(
+                "Large text triggered: user_id=%s",
+                user_id,
+            )
             return None
 
-        check_user = await self.storage.redis.get(name=user)
+        await self.storage.redis.incr(user_id)
+        count = int(await self.storage.redis.get(user_id))
+        current_ttl = await self.storage.redis.ttl(user_id)
+        print(await self.storage.redis.ttl(user_id), await self.storage.redis.get(user_id))
+        if count == 1 or current_ttl == -1:
+            await self.storage.redis.expire(user_id, ttl)
+            return await handler(new_event, data)
 
-        if check_user:
-            if int(check_user.decode()) == 2:
-                await self.storage.redis.set(name=user, value=1, ex=1)
-                return await handler(new_event, data)
-
-            elif int(check_user.decode()) == 1:
-                await self.storage.redis.set(name=user, value=0, ex=5)
-                await event.answer(
-                    "Слишком частые сообщения. Бот приостановлен на 5 секунд"
-                )
+        elif count > limit:
+            await event.answer(
+                "Слишком частые сообщения. Попробуйте чуть позже"
+            )
+            logger.info(
+                "Antispam triggered: user_id=%s",
+                user_id,
+            )
             return None
-
-        await self.storage.redis.set(name=user, value=2, ex=1)
 
         return await handler(new_event, data)

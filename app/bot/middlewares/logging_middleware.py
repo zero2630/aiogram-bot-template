@@ -1,5 +1,3 @@
-# app/bot/middlewares/logging_middleware.py
-
 import logging
 import time
 from typing import Any, Callable, Awaitable, Dict

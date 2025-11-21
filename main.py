@@ -10,7 +10,7 @@ from app.bot.handlers.user import user, watch_page
 from app.bot.handlers.admin import admin, create_page
 from app.config.settings import get_settings
 from app.utils.redis import get_redis
-from app.bot.middlewares import logging_middleware
+from app.bot.middlewares import logging_middleware, spam_middleware
 
 
 def setup_logging(level: str = "INFO"):
@@ -41,6 +41,7 @@ async def main():
         watch_page.router,
     )
     dp.update.middleware(logging_middleware.LoggingMiddleware())
+    dp.message.middleware(spam_middleware.SpamMiddleware(storage))
     await dp.start_polling(bot)
 
 
