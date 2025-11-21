@@ -8,8 +8,10 @@ from aiogram.fsm.context import FSMContext
 from app.bot.keyboards import reply, inline
 from app.bot.states.default_states import CreateBroadcast
 from app.services import broadcast
+from app.bot.filters import admin_filter
 
 router = Router()
+router.message.filter(admin_filter.AdminFilter())
 
 
 @router.message(Command("admin"))

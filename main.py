@@ -1,4 +1,5 @@
 import asyncio  # noqa: F401
+import logging
 
 from aiogram.fsm.storage.redis import RedisStorage
 from aiogram import Bot, Dispatcher
@@ -9,10 +10,19 @@ from app.bot.handlers.user import user, watch_page
 from app.bot.handlers.admin import admin, create_page
 from app.config.settings import get_settings
 from app.utils.redis import get_redis
+from app.bot.middlewares import logging_middleware
+
+
+def setup_logging(level: str = "INFO"):
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    )
 
 
 async def main():
     settings = get_settings()
+    setup_logging()
     redis_client = await get_redis()
 
     storage = RedisStorage(redis=redis_client)
@@ -30,6 +40,7 @@ async def main():
         create_page.router,
         watch_page.router,
     )
+    dp.update.middleware(logging_middleware.LoggingMiddleware())
     await dp.start_polling(bot)
 
 

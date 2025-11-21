@@ -8,8 +8,10 @@ from aiogram.fsm.context import FSMContext
 from app.bot.keyboards import reply, inline
 from app.services import user, user_settings, page
 from app.bot.states.default_states import CreatePageState
+from app.bot.filters import admin_filter
 
 router = Router()
+router.message.filter(admin_filter.AdminFilter())
 
 
 @router.message(F.text == "создать страницу")
