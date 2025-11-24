@@ -6,10 +6,10 @@ from app.services.user_settings import get_user_settings
 class Default(CallbackData, prefix="default"):
     action: str
 
-class UserSettings(CallbackData, prefix="reaction"):
+class UserSettings(CallbackData, prefix="settings"):
     action: str
 
-class Broadcast(CallbackData, prefix="reaction"):
+class Broadcast(CallbackData, prefix="broadcast"):
     action: str
     text: str
 

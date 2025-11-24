@@ -1,8 +1,8 @@
 import asyncio  # noqa: F401
+from datetime import datetime
 
 from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert
-
 
 from app.db.models.user import User
 from app.db.models.user_settings import UserSettings
@@ -11,7 +11,6 @@ from app.db.database import async_session_maker
 
 
 async def create_user(tg_id: int):
-
     async with async_session_maker() as session:
         stmt = insert(User).values(tg_id=tg_id).on_conflict_do_nothing().returning(User.id)
         res = await session.execute(stmt)
@@ -22,3 +21,9 @@ async def create_user(tg_id: int):
             await session.execute(stmt)
             await session.commit()
 
+
+async def update_user_activity(tg_id: int):
+    async with async_session_maker() as session:
+        stmt = update(User).values(last_activity_at=datetime.utcnow()).where(User.tg_id == tg_id)
+        await session.execute(stmt)
+        await session.commit()
