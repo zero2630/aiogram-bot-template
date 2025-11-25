@@ -23,6 +23,40 @@ async def command_admin(message: Message):
     )
 
 
+@router.message(Command("setadmin"))
+async def command_admin(message: Message, command: Command):
+    args = command.args
+    if args.isdigit():
+        await user.set_user_admin(int(args), True)
+        await message.answer(
+            "Пользователь назначен администратором",
+            reply_markup=reply.get_admin_menu(),
+        )
+
+    else:
+        await message.answer(
+            "Неверный id",
+            reply_markup=reply.get_admin_menu(),
+        )
+
+
+@router.message(Command("unsetadmin"))
+async def command_admin(message: Message, command: Command):
+    args = command.args
+    if args.isdigit():
+        await user.set_user_admin(int(args), False)
+        await message.answer(
+            "Пользователь снят с должности администратора",
+            reply_markup=reply.get_admin_menu(),
+        )
+
+    else:
+        await message.answer(
+            "Неверный id",
+            reply_markup=reply.get_admin_menu(),
+        )
+
+
 @router.message(F.text == "рассылка")
 async def create_broadcast_start(message: Message, state: FSMContext):
     await state.set_state(CreateBroadcast.text)

@@ -61,3 +61,11 @@ async def get_users_page(offset):
         res = (await session.execute(stmt)).scalar_one_or_none()
 
         return res
+
+
+async def set_user_admin(tg_id: int, is_admin):
+    async with async_session_maker() as session:
+        stmt = update(User).values(is_admin=is_admin).where(User.tg_id == tg_id)
+        await session.execute(stmt)
+        await session.commit()
+

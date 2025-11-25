@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     )
 
     BOT_TOKEN: str
-    ADMINS: list[int]
+    OWNER_ID: int
 
     DB_HOST: str
     DB_NAME: str
