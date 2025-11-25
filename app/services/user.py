@@ -10,9 +10,9 @@ from app.db.database import async_session_maker
 
 
 
-async def create_user(tg_id: int):
+async def create_user(tg_id: int, username: str | None):
     async with async_session_maker() as session:
-        stmt = insert(User).values(tg_id=tg_id).on_conflict_do_nothing().returning(User.id)
+        stmt = insert(User).values(tg_id=tg_id, username=username).on_conflict_do_nothing().returning(User.id)
         res = await session.execute(stmt)
         inserted_id = res.scalar_one_or_none()
 

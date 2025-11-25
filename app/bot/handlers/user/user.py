@@ -12,7 +12,8 @@ router = Router()
 
 @router.message(CommandStart())
 async def command_start(message: Message, command: Command):
-    await user.create_user(message.from_user.id)
+    usr = message.from_user
+    await user.create_user(usr.id, usr.username)
     await message.answer(
         "Стартовый текст",
         reply_markup=reply.get_main_menu(),
