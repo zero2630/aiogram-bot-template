@@ -38,7 +38,7 @@ class ActivityMiddleware(BaseMiddleware):
             tg_user = event.message.from_user.id
         elif event.callback_query:
             tg_user = event.callback_query.message.from_user.id
-        print(tg_user)
+
         if tg_user is not None:
             key = f"{self.prefix}:{tg_user}"
 
