@@ -102,22 +102,25 @@ async def admin_users(message: Message, state: FSMContext):
     )
 
 
-# @router.message(F.text == "📋 Список")
-# async def create_page_start(message: Message, state: FSMContext):
-#     data = await user.get_users_page(0)
-#     users_amount = await user.get_users_amount()
-#     await message.answer(
-#     f"<b>{data.title}</b>\n{data.text}",
-#     reply_markup=inline.get_pagination_kb(1, pages_amount),
-#     )
+@router.message(F.text == "📋 Список")
+async def watch_user_list(message: Message, state: FSMContext):
+    pagesize = 3
+    data = await user.get_users_page(0, pagesize)
+    users_amount = await user.get_users_amount()
+    rows = [f"@{data[i].username or "без_ника"} (id=<code>{data[i].tg_id}</code>) | Заблокирован: {'да' if data[i].is_blocked else 'нет'}" for i in range(len(data))]
+    answ_str =  f"📋 Список пользователей\n"+"\n".join(rows)
+    await message.answer(
+    answ_str,
+    reply_markup=inline.get_pagination_kb(1, users_amount, "userlist", pagesize),
+    )
 
-
-# @router.callback_query(inline.Paginator.filter(F.action.in_(["prev", "next"])))
-# async def change_lang_callback(call: CallbackQuery, callback_data: inline.UserSettings):
-#     data = await page.get_page(callback_data.page-1)
-
-#     await call.message.edit_text(
-#     f"<b>{data.title}</b>\n{data.text}",
-#     reply_markup=inline.get_pagination_kb(callback_data.page, callback_data.total_pages),
-#     )
+@router.callback_query(inline.Paginator.filter(F.action.startswith("userlist") & F.action.endswith(("prev", "next"))))
+async def callback_watch_users_list(call: CallbackQuery, callback_data: inline.UserSettings):
+    data = await user.get_users_page(callback_data.page-1, callback_data.pagesize)
+    rows = [f"@{data[i].username or "без_ника"} (id=<code>{data[i].tg_id}</code>) | Заблокирован: {'да' if data[i].is_blocked else 'нет'}" for i in range(len(data))]
+    answ_str =  f"📋 Список пользователей\n"+"\n".join(rows)
+    await call.message.edit_text(
+    answ_str,
+    reply_markup=inline.get_pagination_kb(callback_data.page, callback_data.total_pages, "userlist", callback_data.pagesize),
+    )
 

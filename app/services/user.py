@@ -50,15 +50,15 @@ async def get_users_active(duration: timedelta):
         return res
 
 
-async def get_users_page(offset):
+async def get_users_page(offset, pagesize):
     async with async_session_maker() as session:
         stmt = (
-            select(Page)
-            .order_by(Page.id)
-            .limit(2)
+            select(User)
+            .order_by(User.id)
+            .limit(pagesize)
             .offset((offset))
         )
-        res = (await session.execute(stmt)).scalar_one_or_none()
+        res = (await session.scalars(stmt)).all()
 
         return res
 

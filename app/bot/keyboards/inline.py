@@ -1,3 +1,5 @@
+import math
+
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.filters.callback_data import CallbackData
 
@@ -18,6 +20,7 @@ class Paginator(CallbackData, prefix="paginator"):
     action: str
     page: int
     total_pages: int
+    pagesize: int
 
 
 async def get_user_settings_kb(user):
@@ -37,6 +40,8 @@ async def get_user_settings_kb(user):
 def get_pagination_kb(
     page: int,
     total_pages: int,
+    prefix: str,
+    pagesize: int = 1
 ):
 
     if total_pages < 1:
@@ -52,20 +57,30 @@ def get_pagination_kb(
     if page > 1:
         kb.button(
             text="« Назад",
-            callback_data=Paginator(action="prev", page=page-1, total_pages=total_pages)
+            callback_data=Paginator(
+                action=f"{prefix}-prev",
+                page=page-pagesize if page-pagesize > 0 else 1,
+                total_pages=total_pages,
+                pagesize=pagesize
+                )
         )
 
     # Кнопка с текущей страницей (просто индикатор)
     kb.button(
-        text=f"Стр. {page}/{total_pages}",
+        text=f"Стр. {(page+pagesize-1)//pagesize}/{math.ceil(total_pages/pagesize)}",
         callback_data="noop"
     )
 
     # Кнопка "Вперёд"
-    if page < total_pages:
+    if page+pagesize <= total_pages:
         kb.button(
             text="Вперёд »",
-            callback_data=Paginator(action="next", page=page+1, total_pages=total_pages)
+            callback_data=Paginator(
+                action=f"{prefix}-next",
+                page=page+pagesize,
+                total_pages=total_pages,
+                pagesize=pagesize,
+            )
         )
 
     kb.adjust(3)
