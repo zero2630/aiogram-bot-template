@@ -4,15 +4,14 @@ def get_main_menu():
     menu = ReplyKeyboardMarkup(
         keyboard=[
             [
-                KeyboardButton(text='профиль'),
-                KeyboardButton(text='настройки'),
+                KeyboardButton(text='Профиль'),
+                KeyboardButton(text='Настройки'),
             ],
             [
-                KeyboardButton(text='о боте'),
-                KeyboardButton(text='поддержка'),
+                KeyboardButton(text="Смотреть заметки")
             ],
             [
-                KeyboardButton(text="смотреть страницы")
+                KeyboardButton(text="Создать заметку")
             ]
         ],
         resize_keyboard=True,
@@ -25,11 +24,10 @@ def get_admin_menu():
     menu = ReplyKeyboardMarkup(
         keyboard=[
             [
-                KeyboardButton(text='создать страницу'),
+                KeyboardButton(text='👥 Пользователи'),
                 KeyboardButton(text='рассылка'),
             ],
             [
-                KeyboardButton(text='👥 Пользователи'),
                 KeyboardButton(text='⬅️ Выйти'),
             ],
         ],

@@ -7,7 +7,7 @@ class DefaultState(StatesGroup):
     state3 = State()
 
 
-class CreatePageState(StatesGroup):
+class CreateNoteState(StatesGroup):
     title = State()
     text = State()
 

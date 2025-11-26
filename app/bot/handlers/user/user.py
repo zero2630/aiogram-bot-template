@@ -20,10 +20,10 @@ async def command_start(message: Message, command: Command):
     )
 
 
-@router.message(F.text == "настройки")
+@router.message(F.text == "Настройки")
 async def settings(message: Message):
     await message.answer(
-    "настройки",
+    "Настройки",
     reply_markup=(await inline.get_user_settings_kb(message.from_user.id))
     )
 

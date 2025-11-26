@@ -6,26 +6,26 @@ from aiogram.filters import Command, CommandStart
 from aiogram.fsm.context import FSMContext
 
 from app.bot.keyboards import reply, inline
-from app.services import user, user_settings, page
-from app.bot.states.default_states import CreatePageState
+from app.services import user, user_settings, note
+from app.bot.states.default_states import CreateNoteState
 from app.bot.filters import admin_filter
 
 router = Router()
-router.message.filter(admin_filter.AdminFilter())
+router.message.filter()
 
 
-@router.message(F.text == "создать страницу")
-async def create_page_start(message: Message, state: FSMContext):
-    await state.set_state(CreatePageState.title)
+@router.message(F.text == "Создать заметку")
+async def create_note_start(message: Message, state: FSMContext):
+    await state.set_state(CreateNoteState.title)
     await message.answer(
     "Напишите название",
     reply_markup=reply.get_main_menu(),
     )
 
 
-@router.message(CreatePageState.title, F.text)
-async def create_page_title(message: Message, state: FSMContext):
-    await state.set_state(CreatePageState.text)
+@router.message(CreateNoteState.title, F.text)
+async def create_note_title(message: Message, state: FSMContext):
+    await state.set_state(CreateNoteState.text)
     await state.update_data(title=message.text)
     await message.answer(
         "Напишите текст",
@@ -33,12 +33,12 @@ async def create_page_title(message: Message, state: FSMContext):
     )
 
 
-@router.message(CreatePageState.text, F.text)
-async def create_page_title(message: Message, state: FSMContext):
+@router.message(CreateNoteState.text, F.text)
+async def create_note_title(message: Message, state: FSMContext):
     await state.update_data(text=message.text)
     data = await state.get_data()
     await state.clear()
-    await page.create_page(data["title"], data["text"])
+    await note.create_note(data["title"], data["text"])
     await message.answer(
         "Страница добавлена",
         reply_markup=reply.get_main_menu(),

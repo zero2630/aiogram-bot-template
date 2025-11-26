@@ -6,8 +6,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
-from app.bot.handlers.user import user, watch_page
-from app.bot.handlers.admin import admin, create_page
+from app.bot.handlers.user import user, create_note, watch_note
+from app.bot.handlers.admin import admin
 from app.config.settings import get_settings
 from app.utils.redis import get_redis
 from app.bot.middlewares import logging_middleware, spam_middleware, activity_middleware
@@ -37,8 +37,8 @@ async def main():
     dp.include_routers(
         user.router,
         admin.router,
-        create_page.router,
-        watch_page.router,
+        create_note.router,
+        watch_note.router,
     )
     dp.update.middleware(logging_middleware.LoggingMiddleware())
     dp.update.middleware(activity_middleware.ActivityMiddleware(storage.redis))

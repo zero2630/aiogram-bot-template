@@ -15,6 +15,5 @@ class AdminFilter(BaseFilter):
 
             stmt = select(User.tg_id).where(User.is_admin == True)
             res = (await session.scalars(stmt)).all()
-            print(res)
 
             return tg_id == settings.OWNER_ID or tg_id in res

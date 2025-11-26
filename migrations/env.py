@@ -10,7 +10,7 @@ from app.db.models.base import Base
 from app.db.models.user import User
 from app.db.models.user_settings import UserSettings
 from app.db.models.broadcast import Broadcast
-from app.db.models.page import Page
+from app.db.models.note import Note
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
